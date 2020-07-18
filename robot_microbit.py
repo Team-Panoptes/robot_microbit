@@ -1,8 +1,9 @@
-from microbit import i2c, pin1, pin2, pin15
+from microbit import i2c, pin1, pin2, pin13, pin14, pin15, accelerometer
 from machine import time_pulse_us
 from neopixel import NeoPixel
 from time import sleep_ms
 import music
+from math import sqrt
 
 class Color:
     cyan = 0, 255, 255
@@ -86,3 +87,11 @@ class Robot:
         time = time_pulse_us(pin2, 1)
         distance = 340 * time / 20000
         return distance
+
+    def on_ground(self):
+        """
+        Returns True if p13 or p14 return 1
+        That means that there is a ground (non-black) bellow the robot.
+        """
+
+        return pin14.read_digital() == 1 or pin13.read_digital() == 1
