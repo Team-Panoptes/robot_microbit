@@ -1,7 +1,7 @@
 from microbit import i2c, pin1, pin2, pin13, pin14, pin15, accelerometer
 from machine import time_pulse_us
 from neopixel import NeoPixel
-from time import sleep_ms
+from time import sleep_ms, ticks_diff, ticks_ms
 import music
 from math import sqrt
 
@@ -69,7 +69,8 @@ class Robot:
         self.engine_left(-speed)
 
     def stop(self):
-        self.go_forward(speed=0)
+        self.engine_left(speed=0)
+        self.engine_right(speed=0)
 
     def bip(self, number=1):
         tune = ["D6:1", "R:1"]
@@ -84,9 +85,33 @@ class Robot:
         pin1.write_digital(0)
         pin2.read_digital()
 
-        time = time_pulse_us(pin2, 1)
-        distance = 340 * time / 20000
+        t = time_pulse_us(pin2, 1)
+        distance = 340 * t / 20000
         return distance
+
+    def search_escape(self):
+        distance =0
+        search_speed = int(self.speed * 0.15)
+        start = ticks_ms()
+        turn = True
+        self.turn_right(search_speed)
+        while turn:
+            distance = max(distance, self.distance_from_obstacle())
+
+            if ticks_diff(ticks_ms(), start) >= 50 * self.speed:
+                turn = False
+                self.stop()
+
+            distance -= 1
+
+        turn = True
+        self.turn_left(search_speed)
+        while turn:
+            if self.distance_from_obstacle() >= distance:
+                self.stop()
+                turn = False
+
+        return
 
     def on_ground(self):
         """
