@@ -8,8 +8,8 @@ from math import sqrt
 class Color:
     cyan = 0, 255, 255
     red = 255, 0, 0
-    blue = 0, 255, 0
-    yellow = 0, 255, 255
+    blue = 0, 0, 255
+    yellow = 255, 255, 0
     purple = 255, 0, 255
     green = 0, 255, 0
     withe = 255, 255, 255
@@ -21,15 +21,21 @@ class Robot:
         self.speed = 10
         self.addresse = addresse
 
-    def change_led_color(self, rgb, entry_point=pin15, number=1):
-        np = NeoPixel(entry_point, number)
+    def change_led_color(self, index, rgb, number=1, entry_point=pin15):
+        np = NeoPixel(entry_point, 4)
 
-        for index in range(number):
-            np[index] = rgb
+        if isinstance(rgb, list):
+            colors = rgb
+        else:
+            colors = [rgb] * number
+
+        for i, color in enumerate(colors):
+            np[(index + i) % 4] = color
         np.show()
 
     def change_all_led_color(self, rgb):
-        self.change_led_color(rgb, number=4)
+        self.change_led_color(0, rgb, 4)
+
 
     def engine(self, index, speed=None):
         if speed is None:
@@ -54,14 +60,14 @@ class Robot:
 
         self.go_forward(-speed)
 
-    def turn_left(self, speed=None):
+    def turn_right(self, speed=None):
         if speed is None:
             speed = self.speed
 
         self.engine_left(speed)
         self.engine_right(-speed)
 
-    def turn_right(self, speed=None):
+    def turn_left(self, speed=None):
         if speed is None:
             speed = self.speed
 
@@ -119,4 +125,28 @@ class Robot:
         That means that there is a ground (non-black) bellow the robot.
         """
 
-        return pin14.read_digital() == 1 or pin13.read_digital() == 1
+        return  min(self.ground_status()) == 1
+
+    def left_on_ground(self):
+        """
+        Returns True if p13 return 1
+        That means that there is a ground (non-black) bellow left part of the robot the robot.
+        """
+
+        return self.ground_status()[0] == 1
+
+    def right_on_ground(self):
+        """
+        Returns True if p14 return 1
+        That means that there is a ground (non-black) bellow right part of the robot the robot.
+        """
+
+        return self.ground_status()[1] == 1
+
+    def ground_status(self):
+        """
+        Returns a tuple with the state on p13 and p14.
+
+        """
+
+        return pin13.read_digital(),  pin14.read_digital()
