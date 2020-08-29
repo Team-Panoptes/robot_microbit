@@ -17,9 +17,9 @@ class Color:
 
 
 class Robot:
-    def __init__(self, addresse=0x10):
+    def __init__(self, address=0x10):
         self.speed = 10
-        self.addresse = addresse
+        self.address = address
 
     def change_led_color(self, index, rgb, number=1, entry_point=pin15):
         np = NeoPixel(entry_point, 4)
@@ -42,7 +42,7 @@ class Robot:
             speed = self.speed
         sens = 0 if speed >= 0 else 1
         speed = abs(speed)*255//100
-        i2c.write(self.addresse, bytearray([index, sens, speed]))
+        i2c.write(self.address, bytearray([index, sens, speed]))
 
     def engine_right(self, speed=None):
         self.engine(index=2, speed=speed)

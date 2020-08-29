@@ -1,4 +1,4 @@
 # robot_microbit
-Package to use with micro:Maqueen
+Package for use with the micro:Maqueen.
 
-Some code of this module are inspired by [maqueen module](https://lecluseo.scenari-community.org/CircuitPython/co/g_maqueen.html)
+Some of the code for this module was inspired by the [maqueen module](https://lecluseo.scenari-community.org/CircuitPython/co/g_maqueen.html)
