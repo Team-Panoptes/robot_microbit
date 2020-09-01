@@ -6,7 +6,7 @@ from time import ticks_ms, ticks_diff
 
 robot = Robot()
 robot.speed = 100
-robot.bip(2)
+robot.beep(2)
 distance =0
 
 while True:

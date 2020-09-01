@@ -4,7 +4,7 @@ from random import randint
 
 robot = Robot()
 robot.speed = 100
-robot.bip(2)
+robot.beep(2)
 while True:
     robot.change_all_led_color(Color.green)
     if robot.distance_from_obstacle() <= 10:

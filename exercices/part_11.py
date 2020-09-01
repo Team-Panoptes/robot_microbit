@@ -1,3 +1,6 @@
+# Exercice 11
+# Objectif: Le robot suit le contour d'un dessin au sol (ex: Space Invader).
+
 from robot_microbit import Robot, Color
 from microbit import sleep, pin1
 from random import randint

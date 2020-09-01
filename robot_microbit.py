@@ -1,4 +1,4 @@
-from microbit import i2c, pin1, pin2, pin13, pin14, pin15, accelerometer
+from microbit import i2c, pin1, pin2, pin13, pin14, pin15, accelerometer, sleep
 from machine import time_pulse_us
 from neopixel import NeoPixel
 from time import sleep_ms, ticks_diff, ticks_ms
@@ -12,7 +12,7 @@ class Color:
     yellow = 255, 255, 0
     purple = 255, 0, 255
     green = 0, 255, 0
-    withe = 255, 255, 255
+    white = 255, 255, 255
     black = 0, 0, 0
 
 
@@ -78,7 +78,13 @@ class Robot:
         self.engine_left(speed=0)
         self.engine_right(speed=0)
 
-    def bip(self, number=1):
+    def wait(self, seconds):
+        """
+        Makes the robot stop for a given amount of seconds. Translates seconds into milliseconds.
+        """
+        sleep(seconds * 1000)
+
+    def beep(self, number=1):
         tune = ["D6:1", "R:1"]
         tunes = []
         for n in range(number):
@@ -150,3 +156,5 @@ class Robot:
         """
 
         return pin13.read_digital(),  pin14.read_digital()
+
+robot = Robot()
