@@ -1,4 +1,4 @@
-from microbit import i2c, pin1, pin2, pin13, pin14, pin15, accelerometer, sleep
+from microbit import *
 from machine import time_pulse_us
 from neopixel import NeoPixel
 from time import sleep_ms, ticks_diff, ticks_ms
@@ -42,7 +42,10 @@ class Robot:
             speed = self.speed
         sens = 0 if speed >= 0 else 1
         speed = abs(speed)*255//100
-        i2c.write(self.address, bytearray([index, sens, speed]))
+        try:
+            i2c.write(self.address, bytearray([index, sens, speed]))
+        except:
+            pass
 
     def engine_right(self, speed=None):
         self.engine(index=2, speed=speed)
